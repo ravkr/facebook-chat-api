@@ -3,6 +3,15 @@
 var utils = require("../utils");
 var log = require("npmlog");
 
+function formatListGraphQLResponse(data) {
+  return data.map((t) => {
+    return {
+      threadID: t.thread_key.thread_fbid || t.thread_key.other_user_id,
+      name: t.name,
+    }
+  })
+}
+
 module.exports = function(defaultFuncs, api, ctx) {
   return function getThreadListGraphQL(limit, timestamp, callback) {
     if(!callback) {
@@ -31,7 +40,8 @@ module.exports = function(defaultFuncs, api, ctx) {
         if (resData.error) {
           throw resData;
         }
-        callback(null, resData)
+        // callback(null, resData[0].o0.data.viewer.message_threads.nodes)
+        callback(null, formatListGraphQLResponse(resData[0].o0.data.viewer.message_threads.nodes));
         // This returns us an array of things. The last one is the success /
         // failure one.
         // @TODO What do we do in this case?
@@ -39,7 +49,7 @@ module.exports = function(defaultFuncs, api, ctx) {
           throw new Error("well darn there was an error_result")
         }
 
-        callback(null, formatMessagesGraphQLResponse(resData[0]));*/
+        callback(null, formatListGraphQLResponse(resData[0]));*/
       })
       .catch(function(err) {
         log.error("getThreadListGraphQL", err);

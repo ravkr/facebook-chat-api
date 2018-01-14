@@ -36,15 +36,17 @@ function formatThreadList(data) {
       messageCount: t.messages_count,
       imageSrc: t.image?t.image.uri:null,
       emoji: t.customization_info?t.customization_info.emoji:null,
-      muteUntil: data.mute_until,
-      participants: formatParticipants(t.all_participants),
-      // : t.,
-      // : t.,
-      nicknames: t.customization_info?t.customization_info.participant_customizations.map((u) => { return {"userID": u.participant_id, "nickname": u.nickname }; }):[],
       color: t.customization_info?t.customization_info.outgoing_bubble_color:null, // TODO: what to return? "FF8C0077" or null
-      // adminIDs: t.thread_admins, // feature from future? it is always an empty array - for more than a year
-      // customizationEnabled: t.customization_enabled; // TODO: always true? (was true even when customization_info was null)
-      threadType: data.thread_type, // "GROUP" or "ONE_TO_ONE"
+      nicknames: t.customization_info?t.customization_info.participant_customizations.map((u) => { return {"userID": u.participant_id, "nickname": u.nickname }; }):[],
+      muteUntil: t.mute_until,
+      participants: formatParticipants(t.all_participants),
+      folder: t.folder, // "INBOX" or...?
+      // : t.,
+      threadType: t.thread_type, // "GROUP" or "ONE_TO_ONE"
+      // rtc_call_data: t.rtc_call_data, // TODO: format and document this
+      // adminIDs: t.thread_admins, // feature from future? it is always an empty array - for more than a year (2018-01-14)
+      // isPinProtected: t.is_pin_protected, // feature from future? always false (2018-01-14)
+      // customizationEnabled: t.customization_enabled; // TODO: always true? (was true even when customization_info was null) (2018-01-14)
     }
   })
 }
@@ -68,7 +70,7 @@ function formatThread(data) {
     isCanonicalUser: data.is_canonical_user,
     isCanonical: data.is_canonical,
     isSubscribed: data.is_subscribed,
-    folder: data.folder,
+    // folder: data.folder,
     isArchived: data.is_archived,
     recipientsLoadable: data.recipients_loadable,
     hasEmailParticipant: data.has_email_participant,

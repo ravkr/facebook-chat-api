@@ -18,7 +18,8 @@
 * [`api.getFriendsList`](#getFriendsList)
 * [`api.getThreadHistory`](#getThreadHistory)
 * [`api.getThreadInfo`](#getThreadInfo)
-* [`api.getThreadList`](#getThreadList)
+* [`api.getThreadList`](#getThreadList) (deprecated)
+* [`api.getThreadListGraphQL`](#getThreadListGraphQL)
 * [`api.getThreadPictures`](#getThreadPictures)
 * [`api.getUserID`](#getUserID)
 * [`api.getUserInfo`](#getUserInfo)
@@ -590,8 +591,56 @@ __Arguments__
 
 ---------------------------------------
 
+<a name="getThreadListGraphQL"></a>
+### api.getTheadListGraphQL(limit, timestamp, callback)
+
+Returns information about the user's threads.
+
+__Arguments__
+
+* `limit`: Limit the number of threads to this number.
+* `timestamp`: Request threads _before_ this date.
+* `callback(err, arr)`: Callback called when the query is done (either with an error or with a proper result). `arr` is of type _array_ and contains objects with the following properties:
+
+| Key           | Description                                           |
+|---------------|-------------------------------------------------------|
+| threadID      | ID of the thread                                      |
+| name          | The name of the thread                                |
+| unreadCount   | Amount of unread messages in thread                   |
+| messageCount  | Amount of messages in thread                          |
+| imageSrc      | Link of the thread's image (if present)               |
+| emoji         | The set emoji for the thread (default: Like)          |
+| color         | Thread's message color (default: blue)                |
+| nicknames     | An array of nicknames. Format: `{"userid": "Nick"}`   |
+| muteUntil     | Timestamp until the mute expires (if present)         |
+| participants  | An array of participants. See below for format        |
+| folder        | `INBOX` or `ARCHIVE` (unverified)                     |
+| threadType    | `GROUP` or `ONE_TO_ONE` (The type of the thread)      |
+
+__`participants` format__
+
+| Key                       | Description                                                   |
+|---------------------------|---------------------------------------------------------------|
+| userID                    | ID of user                                                    |
+| name                      | Full name of user                                             |
+| shortName                 | Short name of user (most likely first name)                   |
+| gender                    | Either `MALE` or `FEMALE`                                     |
+| url                       | The user's full Facebook URL                                  |
+| profilePicture            | Profile picture of user                                       |
+| username                  | Username of user (`@whatever`)                                |
+| isViewerFriend            | Is the user a friend of you?                                  |
+| isMessengerUser           | Does the user use Messenger?                                  |
+| isVerified                | Is the user verified? (Little blue tick mark)                 |
+| isMessageBlockedByViewer  | Is the user blocking messages from you?                       |
+| isViewerCoworker          | Is the user your coworker? (Whatever that's supposed to mean) |
+| isEmployee                | `null`? (unverified)                                          |
+
+---------------------------------------
+
 <a name="getThreadList"></a>
 ### api.getThreadList(start, end, type, callback)
+
+> As of 2018.02.05, a new GraphQL call (see [here](#getThreadListGraphQL)) has been implemented for this purpose. Please refrain from using this as it **no longer works**.
 
 Will return information about threads.
 

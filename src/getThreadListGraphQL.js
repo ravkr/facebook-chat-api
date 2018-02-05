@@ -53,20 +53,90 @@ function formatThreadList(data) {
       participants: formatParticipants(t.all_participants),
       folder: t.folder, // "INBOX" or...?
       // : t.,
-      threadType: t.thread_type, // "GROUP" or "ONE_TO_ONE"
+      threadType: t.thread_type, // "GROUP" or "ONE_TO_ONE" (user to user and user to page) // TODO: how about bots? can someone check
       // rtc_call_data: t.rtc_call_data, // TODO: format and document this
       // adminIDs: t.thread_admins, // feature from future? it is always an empty array - for more than a year (2018-02-05)
       // isPinProtected: t.is_pin_protected, // feature from future? always false (2018-02-05)
-      // customizationEnabled: t.customization_enabled; // TODO: always true? (was true even when customization_info was null) (2018-02-05)
+      // customizationEnabled: t.customization_enabled, // TODO: always true? (was true even when customization_info was null) (2018-02-05)
+      // participantAddModeAsString: t.participant_add_mode_as_string, // "ADD" if "GROUP" and null if "ONE_TO_ONE". do we need it?
+      montageThread: t.montage_thread?t.montage_thread.id:null, // base64 encoded string "message_thread:0000000000000000" - it is not userID nor any other ID known to me..
     }
   })
 }
+/*
+SOME DEBUG DATA
+    {
+        "messaging_actor": {
+            "id": "232000000000000",
+            "__typename": "Page",
+            "name": "Cut Cut Cut Cut Cut Cut Cut",
+            "url": "https://www.facebook.com/cutcutcut/",
+            "big_image_src": {
+                "uri": "https://scontent-frt3-2.xx.fbcdn.net/v/t1.0-1/p50x50/......"
+            },
+            "username": "cutcutcut",
+            "accepts_messenger_user_feedback": false,
+            "is_messenger_user": false,
+            "is_verified": false,
+            "is_messenger_platform_bot": false,
+            "is_message_blocked_by_viewer": false
+        }
+    },
+    {
+        "messaging_actor": {
+            "id": "100000000000000",
+            "__typename": "User",
+            "name": "Cut Cut",
+            "gender": "FEMALE",
+            "url": "https://www.facebook.com/cut...",
+            "big_image_src": {
+                "uri": "https://scontent-frt3-2.xx.fbcdn.net/v/t1.0-1/p50x50/......"
+            },
+            "short_name": "Cut",
+            "username": "cut...",
+            "is_viewer_friend": false,
+            "is_messenger_user": true,
+            "is_verified": false,
+            "is_message_blocked_by_viewer": false,
+            "is_viewer_coworker": false,
+            "is_employee": null
+        }
+
+        "rtc_call_data": {
+            "call_state": "NO_ONGOING_CALL",
+            "server_info_data": "",
+            "initiator": {
+                "id": "100000000000000"
+            }
+        },
+
+        "rtc_call_data": {
+            "call_state": "NO_ONGOING_CALL",
+            "server_info_data": "",
+            "initiator": null
+        },
+
+        "rtc_call_data": {
+            "call_state": "AUDIO_GROUP_CALL",
+            "server_info_data": "GANsbGEYFkdST1VQOjIwMjEzODE3MTQ1NTU4NjgYCFlxZnhHU25nAA==",
+            "initiator": {
+                "id": "100000000000000"
+            }
+        },
+
+        "montage_thread": {
+            "id": "bWVzc2FnZV90aHJlYWQ6MTE0MzUwNTk3MjM3MDQzOA"
+        },
+        base64decode: "message_thread:1143505972370438"
+
+
+*/
 
 function formatThread(data) {
   return {
     // threadID: formatID(data.thread_fbid.toString()),
     // participants: data.participants.map(formatID),
-    participantIDs: data.participants.map(formatID),
+    // participantIDs: data.participants.map(formatID),
     // name: data.name,
     // nicknames: data.custom_nickname,
     snippet: data.snippet,
@@ -92,7 +162,7 @@ function formatThread(data) {
     lastReadTimestamp: data.last_read_timestamp,
     lastMessageType: data.last_message_type,
     // emoji: data.custom_like_icon,
-    color: data.custom_color,
+    //color: data.custom_color,
     // adminIDs: data.admin_ids,
     // threadType: data.thread_type
   };

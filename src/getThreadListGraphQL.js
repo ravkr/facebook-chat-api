@@ -5,10 +5,10 @@ var log = require("npmlog");
 
 function formatParticipants(participants) {
   return participants.nodes.map((p)=>{
+    // console.log(p.messaging_actor);
     p = p.messaging_actor;
-    console.log(p.messaging_actor);
     return {
-      userID: p.id,
+      userID: utils.formatID(p.id.toString()), // do we need .toString()? when it is not a string?
       name: p.name,
       shortName: p.short_name,
       gender: p.gender, // MALE, FEMALE
@@ -26,17 +26,28 @@ function formatParticipants(participants) {
   });
 }
 
+function formatColor(color) {
+  if (color && color.match(/^(?:[0-9a-fA-F]{8})$/g)) {
+    return color.slice(2);
+  }
+  return color;
+}
+
 function formatThreadList(data) {
+  var fs = require('fs'); // TODO: remove
+  fs.writeFile('threadList_raw.json', JSON.stringify(data), function(err) {
+    if (err) throw err;
+  });
   return data.map((t) => {
     return {
-      threadID: t.thread_key.thread_fbid || t.thread_key.other_user_id,
+      threadID: utils.formatID(t.thread_key.thread_fbid || t.thread_key.other_user_id),
       name: t.name,
       // lastMessage: t.last_message, // TODO
       unreadCount: t.unread_count,
       messageCount: t.messages_count,
       imageSrc: t.image?t.image.uri:null,
       emoji: t.customization_info?t.customization_info.emoji:null,
-      color: t.customization_info?t.customization_info.outgoing_bubble_color:null, // TODO: what to return? "FF8C0077" or null
+      color: formatColor(t.customization_info?t.customization_info.outgoing_bubble_color:null), // TODO: what to return? "FF8C0077" or null
       nicknames: t.customization_info?t.customization_info.participant_customizations.map((u) => { return {"userID": u.participant_id, "nickname": u.nickname }; }):[],
       muteUntil: t.mute_until,
       participants: formatParticipants(t.all_participants),
@@ -44,9 +55,9 @@ function formatThreadList(data) {
       // : t.,
       threadType: t.thread_type, // "GROUP" or "ONE_TO_ONE"
       // rtc_call_data: t.rtc_call_data, // TODO: format and document this
-      // adminIDs: t.thread_admins, // feature from future? it is always an empty array - for more than a year (2018-01-14)
-      // isPinProtected: t.is_pin_protected, // feature from future? always false (2018-01-14)
-      // customizationEnabled: t.customization_enabled; // TODO: always true? (was true even when customization_info was null) (2018-01-14)
+      // adminIDs: t.thread_admins, // feature from future? it is always an empty array - for more than a year (2018-02-05)
+      // isPinProtected: t.is_pin_protected, // feature from future? always false (2018-02-05)
+      // customizationEnabled: t.customization_enabled; // TODO: always true? (was true even when customization_info was null) (2018-02-05)
     }
   })
 }

@@ -646,13 +646,7 @@ __`participants` format__
 <th>Description</th>
 </tr>
 <tr>
-<td rowspan="14">User</td>
-<td>accountType</td>
-<td>
-<code>"User"</code>
-</td>
-</tr>
-<tr>
+<td rowspan="13">User</td>
 <td>userID</td>
 <td>ID of user</td>
 </tr>
@@ -717,13 +711,7 @@ __`participants` format__
 </tr>
 
 <tr>
-<td rowspan="11">Page</td>
-<td>accountType</td>
-<td>
-<code>"Page"</code>
-</td>
-</tr>
-<tr>
+<td rowspan="10">Page</td>
 <td>userID</td>
 <td>ID of the page</td>
 </tr>
@@ -767,13 +755,7 @@ __`participants` format__
 </tr>
 
 <tr>
-<td rowspan="8">ReducedMessagingActor</td>
-<td>accountType</td>
-<td>
-<code>"ReducedMessagingActor"</code> (account requres verification, messages are hidden)
-</td>
-</tr>
-<tr>
+<td rowspan="7">ReducedMessagingActor<br />(account requres verification,<br />messages are hidden)</td>
 <td>userID</td>
 <td>ID of the user</td>
 </tr>
@@ -805,13 +787,7 @@ __`participants` format__
 <td>Is the user blocking messages from you?</td>
 </tr>
 <tr>
-<td rowspan="8">UnavailableMessagingActor</td>
-<td>accountType</td>
-<td>
-<code>"UnavailableMessagingActor"</code> (account disabled/removed)     
-</td>
-</tr>
-<tr>
+<td rowspan="7">UnavailableMessagingActor<br />(account disabled/removed)</td>
 <td>userID</td>
 <td>ID of the user</td>
 </tr>
